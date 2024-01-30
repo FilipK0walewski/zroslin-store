@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zroślin - rejestracja konta</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+</head>
+
+<body>
+    <%- include('partials/header') %>
+
+        <main class="w-0 py-0">
+
+            <form class="form-0" method="POST" action="/api/login">
+                <div class="relative">
+                    <input id="username-input" class="input-0" type="text" name="username" autocomplete="off"
+                        placeholder=" " required>
+                    <label for="username-input" class="input-label-0">Nazwa użytkownika</label>
+                </div>
+
+                <div class="relative">
+                    <input id="email-input" class="input-0" type="email" name="email" autocomplete="off"
+                        placeholder=" " required>
+                    <label for="email-input" class="input-label-0">Adres email</label>
+                </div>
+
+                <div class="relative">
+                    <input id="password-input-0" class="input-0" type="password" name="password-0" autocomplete="off"
+                        placeholder=" " required>
+                    <label for="password-input-0" class="input-label-0">Hasło</label>
+                </div>
+
+                <div class="relative">
+                    <input id="password-input-1" class="input-0" type="password" name="password-1" autocomplete="off"
+                        placeholder=" " required>
+                    <label for="password-input-1" class="input-label-0">Powtórz hasło</label>
+                </div>
+                <button type="submit" class="btn-0">Załóż konto</button>
+            </form>
+
+            <span>Masz już konto? <a href="/logowanie">Zaloguj się</a></span>
+
+        </main>
+
+        <%- include('partials/footer') %>
+</body>
+
+</html>
