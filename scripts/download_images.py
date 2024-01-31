@@ -1,3 +1,4 @@
+import os
 import psycopg2
 import requests
 
@@ -8,6 +9,7 @@ from psycopg2.extras import execute_values
 
 
 def download(image_id, url):
+
     a, b = url.replace('https://dropshipping.hagne.pl/', '').split('/')
     a = a.replace('-thickbox_default', '')
     c, d = b.split('.')
@@ -33,7 +35,7 @@ def download(image_id, url):
     return image_id, image_path
 
 def main():
-    conn = psycopg2.connect(host='localhost', dbname='shop', user='shop', password='shop')
+    conn = psycopg2.connect(host='localhost', dbname='zroslin', user='zroslin', password='zroslin')
     cur = conn.cursor()
 
     cur.execute('select id, url from images where name is null')

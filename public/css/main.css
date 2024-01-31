@@ -124,6 +124,11 @@ footer {
     margin-right: auto;
 }
 
+.w-1 {
+    max-width: 400px;
+    width: 100%;
+}
+
 .ul-0 {
     margin: 0 !important;
     padding: 0 !important;
