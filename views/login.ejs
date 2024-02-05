@@ -14,8 +14,8 @@
 
     <main class="w-0 py-0">
 
-        <% if (message) { %>
-            <p><%= message %></p>
+        <% if (typeof loginValidationMessage !== 'undefined') { %>
+            <p><%= loginValidationMessage %></p>
         <% } %>
 
         <form class="form-0" method="POST" action="/logowanie">

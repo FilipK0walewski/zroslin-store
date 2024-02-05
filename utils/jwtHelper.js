@@ -3,18 +3,21 @@ const jwt = require('jsonwebtoken');
 const secretKey = process.env.JWT_SECRET || 'your_secret_key';
 
 module.exports = {
-    generateToken(payload) {
-        return jwt.sign(payload, secretKey);
+    generateToken(username) {
+        return jwt.sign({ username }, secretKey);
     },
-    verifyToken(token) {
-        return new Promise((resolve, reject) => {
+    verifyToken(req, res, next) {
+        const token = req.cookies.jwt;
+        if (token) {
             jwt.verify(token, secretKey, (err, decoded) => {
                 if (err) {
-                    reject(err);
+                    res.clearCookie('jwt')
                 } else {
-                    resolve(decoded);
+                    req.user = decoded
+                    res.locals.user = decoded
                 }
-            });
-        });
+            })
+        }
+        next()
     }
 };
