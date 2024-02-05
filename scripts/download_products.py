@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup
 
 
 def main():
-    conn = psycopg2.connect(host='localhost', dbname='shop', user='shop', password='shop')
+    conn = psycopg2.connect(host='localhost', dbname='zroslin', user='zroslin', password='zroslin')
     cur = conn.cursor()
 
     print('update products start')

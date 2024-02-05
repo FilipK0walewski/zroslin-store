@@ -1,117 +1,103 @@
 <header class="relative">
     <div class="flex-between h-0 w-0 py-0">
-        <nav class="hidden-mobile">
-            <ul class="category-tree">
-                <li class="category-item">
-                    <a href="/kategoria/okulary">Okulary</a>
-                    <ul class="subcategory">
-                        <li><a href="/kategoria/okulary-dla-dzieci">Okulary dla dzieci</a></li>
-                        <li><a href="/kategoria/okulary-przeciwsloneczne">Okulary przeciwsłoneczne</a></li>
-                        <li><a href="/kategoria/oprawki-do-okularow">Oprawki do okularów</a></li>
-                        <li><a href="/kategoria/okulary-zerowki">Okulary zerówki</a></li>
-                        <li><a href="/kategoria/okulary-lustrzanki">Okulary lustrzanki</a></li>
-                        <li><a href="/kategoria/nakladki-przeciwsloneczne-na-okulary">Nakładki przeciwsłoneczne na
-                                okluary</a></li>
-                        <li><a href="/kategoria/okulary-sportowe">Okulary sportowe</a></li>
-                        <li><a href="/kategoria/okulary-polaryzacyjne">Okulary polaryzacyjne</a></li>
-                        <li><a href="/kategoria/okulary-korekcyjne">Okulary korekcyjne</a></li>
-                    </ul>
-                </li>
-                <li class="category-item">
-                    <a href="/kategoria/nakrycia-glowy">Nakrycia głowy</a>
-                    <ul class="subcategory">
-                        <li><a href="/kategoria/czapki-zimowe">Czapki zimowe</a></li>
-                        <li><a href="/kategoria/kapelusze">Kapelusze</a></li>
-                        <li><a href="/kategoria/berety-damskie">Berety damskie</a></li>
-                        <li><a href="/kategoria/czapki-z-daszkiem">Czapki z daszkiem</a></li>
-                    </ul>
-                </li>
-                <li class="category-item">
-                    <a href="/kategoria/dodatki">Dodatki</a>
-                    <ul class="subcategory">
-                        <li><a href="/kategoria/torebki">Torebki</a></li>
-                        <li><a href="/kategoria/nerki-i-saszetki">Nerki i saszetki</a></li>
-                        <li><a href="/kategoria/portfele">Portfele</a></li>
-                        <li><a href="/kategoria/plecaki">Plecaki</a></li>
-                        <li><a href="/kategoria/wlosy-syntetyczne">Włosy syntetyczne</a></li>
-                        <li><a href="/kategoria/rekawiczki">Rękawiczki</a></li>
-                        <li><a href="/kategoria/szaliki-szale-i-chusty">Szaliki, szale i chusty</a></li>
-                    </ul>
-                </li>
-            </ul>
-        </nav>
+
+        <input id="burgir-checkbox" class="hidden" type="checkbox">
+
         <a href="/" id="logo">Zroślin</a>
-        <nav class="hidden-mobile">
-            <ul class="ul-0">
-                <li><a href="/konto" class="flex-center a-icon"><%- include('svg/person') %></a></li>
-                <li><a href="/koszyk" class="flex-center a-icon"><%- include('svg/cart') %></a></li>
-            </ul>
-        </nav>
-        <div class="hidden-desktop">
-            <input id="burgir-checkbox" class="hidden" type="checkbox">
+
+        <ul id="category-tree">
+            <li class="main-category">
+
+                <input id="category-checkbox-0" class="category-checkbox hidden" type="checkbox">
+
+                <label for="category-checkbox-0" class="subcategory-toogle-label">
+                    <a href="/produkty?kategoria=okulary" class="category-link">Okulary</a>
+                    <div class="flex-center hidden-desktop">
+                        <%- include('svg/arrow-down') %>
+                    </div>
+                </label>
+                
+                <ul class="subcategories">
+                    <li><a href="/produkty?kategoria=okulary-dla-dzieci">Okulary dla dzieci</a></li>
+                    <li><a href="/produkty?kategoria=okulary-przeciwsloneczne">Okulary przeciwsłoneczne</a></li>
+                    <li><a href="/produkty?kategoria=oprawki-do-okularow">Oprawki do okularów</a></li>
+                    <li><a href="/produkty?kategoria=okulary-zerowki">Okulary zerówki</a></li>
+                    <li><a href="/produkty?kategoria=okulary-lustrzanki">Okulary lustrzanki</a></li>
+                    <li><a href="/produkty?kategoria=nakladki-przeciwsloneczne-na-okulary">Nakładki przeciwsłoneczne na
+                            okluary</a></li>
+                    <li><a href="/produkty?kategoria=okulary-sportowe">Okulary sportowe</a></li>
+                    <li><a href="/produkty?kategoria=okulary-polaryzacyjne">Okulary polaryzacyjne</a></li>
+                    <li><a href="/produkty?kategoria=okulary-korekcyjne">Okulary korekcyjne</a></li>
+                </ul>
+            </li>
+            <li class="main-category">
+                <input id="category-checkbox-1" class="category-checkbox hidden" type="checkbox">
+
+                <label for="category-checkbox-1" class="subcategory-toogle-label">
+                    <a href="/produkty?kategoria=nakrycia-glowy" class="category-link">Nakrycia głowy</a>
+
+                    <div class="flex-center hidden-desktop">
+                        <%- include('svg/arrow-down') %>
+                    </div>
+                </label>
+
+                <ul class="subcategories">
+                    <li><a href="/produkty?kategoria=czapki-zimowe">Czapki zimowe</a></li>
+                    <li><a href="/produkty?kategoria=kapelusze">Kapelusze</a></li>
+                    <li><a href="/produkty?kategoria=berety-damskie">Berety damskie</a></li>
+                    <li><a href="/produkty?kategoria=czapki-z-daszkiem">Czapki z daszkiem</a></li>
+                </ul>
+            </li>
+            <li class="main-category">
+                <input id="category-checkbox-2" class="category-checkbox hidden" type="checkbox">
+                <label for="category-checkbox-2" class="subcategory-toogle-label">
+                    <a href="/produkty?kategoria=dodatki" class="category-link">Dodatki</a>
+
+                    <div class="flex-center hidden-desktop">
+                        <%- include('svg/arrow-down') %>
+                    </div>
+                </label>
+                <ul class="subcategories">
+                    <li><a href="/produkty?kategoria=torebki">Torebki</a></li>
+                    <li><a href="/produkty?kategoria=nerki-i-saszetki">Nerki i saszetki</a></li>
+                    <li><a href="/produkty?kategoria=portfele">Portfele</a></li>
+                    <li><a href="/produkty?kategoria=plecaki">Plecaki</a></li>
+                    <li><a href="/produkty?kategoria=wlosy-syntetyczne">Włosy syntetyczne</a></li>
+                    <li><a href="/produkty?kategoria=rekawiczki">Rękawiczki</a></li>
+                    <li><a href="/produkty?kategoria=szaliki-szale-i-chusty">Szaliki, szale i chusty</a></li>
+                </ul>
+            </li>
+        </ul>
+
+        <div class="flex-center">
+
             <a href="/konto" class="flex-center a-icon"><%- include('svg/person') %></a>
             <a href="/koszyk" class="flex-center a-icon ml-0"><%- include('svg/cart') %></a>
-            <label for="burgir-checkbox" id="burgir-checkbox-label" class="flex-center ml-0">
+            <label for="burgir-checkbox" id="burgir-checkbox-label" class="flex-center ml-0 hidden-desktop">
                 <%- include('svg/hamburger') %>
             </label>
-            <ul class="category-tree-mobile">
-                <li class="category-mobile">
-                    <input id="category-checkbox-0" class="category-checkbox" type="checkbox">
-                    <label for="category-checkbox-0" class="subcategory-toogle-label">
-                        <a href="/kategoria/okulary" class="category-link-mobile">Okulary</a>
-                        <div class="flex-center">
-                            <%- include('svg/arrow-down') %>
-                        </div>
-                    </label>
-                    <ul class="subcategory-mobile">
-                        <li><a href="/kategoria/okulary-dla-dzieci">Okulary dla dzieci</a></li>
-                        <li><a href="/kategoria/okulary-przeciwsloneczne">Okulary przeciwsłoneczne</a></li>
-                        <li><a href="/kategoria/oprawki-do-okularow">Oprawki do okularów</a></li>
-                        <li><a href="/kategoria/okulary-zerowki">Okulary zerówki</a></li>
-                        <li><a href="/kategoria/okulary-lustrzanki">Okulary lustrzanki</a></li>
-                        <li><a href="/kategoria/nakladki-przeciwsloneczne-na-okulary">Nakładki przeciwsłoneczne na
-                                okluary</a></li>
-                        <li><a href="/kategoria/okulary-sportowe">Okulary sportowe</a></li>
-                        <li><a href="/kategoria/okulary-polaryzacyjne">Okulary polaryzacyjne</a></li>
-                        <li><a href="/kategoria/okulary-korekcyjne">Okulary korekcyjne</a></li>
-                    </ul>
-                </li>
-                <li class="category-mobile">
-                    <input id="category-checkbox-1" class="category-checkbox" type="checkbox">
-                    <label for="category-checkbox-1" class="subcategory-toogle-label">
-                        <a href="/kategoria/nakrycia-glowy" class="category-link-mobile">Nakrycia głowy</a>
 
-                        <div class="flex-center">
-                            <%- include('svg/arrow-down') %>
-                        </div>
-                    </label>
-                    <ul class="subcategory-mobile">
-                        <li><a href="/kategoria/czapki-zimowe">Czapki zimowe</a></li>
-                        <li><a href="/kategoria/kapelusze">Kapelusze</a></li>
-                        <li><a href="/kategoria/berety-damskie">Berety damskie</a></li>
-                        <li><a href="/kategoria/czapki-z-daszkiem">Czapki z daszkiem</a></li>
-                    </ul>
-                </li>
-                <li class="category-mobile">
-                    <input id="category-checkbox-2" class="category-checkbox" type="checkbox">
-                    <label for="category-checkbox-2" class="subcategory-toogle-label">
-                        <a href="/kategoria/dodatki" class="category-link-mobile">Dodatki</a>
-
-                        <div class="flex-center">
-                            <%- include('svg/arrow-down') %>
-                        </div>
-                    </label>
-                    <ul class="subcategory-mobile">
-                        <li><a href="/kategoria/torebki">Torebki</a></li>
-                        <li><a href="/kategoria/nerki-i-saszetki">Nerki i saszetki</a></li>
-                        <li><a href="/kategoria/portfele">Portfele</a></li>
-                        <li><a href="/kategoria/plecaki">Plecaki</a></li>
-                        <li><a href="/kategoria/wlosy-syntetyczne">Włosy syntetyczne</a></li>
-                        <li><a href="/kategoria/rekawiczki">Rękawiczki</a></li>
-                        <li><a href="/kategoria/szaliki-szale-i-chusty">Szaliki, szale i chusty</a></li>
-                    </ul>
-                </li>
-            </ul>
         </div>
+
     </div>
 </header>
+
+<% if (typeof messages !=='undefined' && Array.isArray(messages) && messages.length> 0) { %>
+    <ul class="w-0">
+        <% messages.forEach(message=> { %>
+            <li class="<%= message.text %> global-message">
+                <%= message.text %>
+            </li>
+        <% }); %>
+    </ul>
+<% } %>
+
+<div class="w-0 py-0">
+    <% if (typeof user !=='undefined' ) { %>
+        <p>
+            zalogowany jako: <%= user.username %>
+        </p>
+    <% } else { %>
+        <p style="color: blue">jesteś gość</p>
+    <% } %>
+</div>

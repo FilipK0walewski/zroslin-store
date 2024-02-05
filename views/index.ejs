@@ -12,24 +12,24 @@
 <body>
     <%- include('partials/header') %>
 
-        <main class="w-0 py-0">
-            <h1>Sklep Zroślin</h1>
-            <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quis possimus voluptatum doloribus aliquam aut
-                nulla illo quidem architecto exercitationem quibusdam harum est eius ab, consequuntur labore, facere
-                reprehenderit eum voluptates!</p>
+    <main class="w-0 py-0">
+        <h1>Sklep Zroślin</h1>
+        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quis possimus voluptatum doloribus aliquam aut
+            nulla illo quidem architecto exercitationem quibusdam harum est eius ab, consequuntur labore, facere
+            reprehenderit eum voluptates!</p>
 
-            <form class="relative min-content" method="GET" action="/products">
-                <input id="search-input" class="input-0" type="text" name="q" autocomplete="off" placeholder=" ">
-                <label for="search-input" class="input-label-0">Szukaj produktów</label>
-                <div class="absolute flex-center input-icon">
-                    <%- include('partials/svg/search') %>
-                </div>
-            </form>
+        <form class="relative w-1" method="GET" action="/products">
+            <input id="search-input" class="input-0" type="text" name="q" autocomplete="off" placeholder=" ">
+            <label for="search-input" class="input-label-0">Szukaj produktów</label>
+            <div class="absolute flex-center input-icon">
+                <%- include('partials/svg/search') %>
+            </div>
+        </form>
 
-            <p>lub <a href="/produkty">przglądaj wszysktie</a></p>
-        </main>
+        <p>lub <a href="/produkty">przglądaj wszysktie</a></p>
+    </main>
 
-        <%- include('partials/footer') %>
+    <%- include('partials/footer') %>
 </body>
 
 </html>

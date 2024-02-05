@@ -78,7 +78,34 @@ EXECUTE FUNCTION update_slug_products();
 CREATE TABLE IF NOT EXISTS images(
     id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     url TEXT UNIQUE NOT NULL,
-    path TEXT UNIQUE,
+    name TEXT UNIQUE,
     product_id INT NOT NULL,
     FOREIGN KEY (product_id) REFERENCES products(id)
 );
+
+CREATE TABLE IF NOT EXISTS users (
+    id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    username VARCHAR(60) UNIQUE NOT NULL,
+    email VARCHAR(60) UNIQUE NOT NULL,
+    password VARCHAR(255) UNIQUE NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
+CREATE OR REPLACE FUNCTION GetCategoryHierarchy(category_id INT) 
+RETURNS TABLE (id INT, name VARCHAR(50), slug VARCHAR(255), parent_id INT) AS $$
+BEGIN
+    RETURN QUERY
+    WITH RECURSIVE CategoryHierarchy AS (
+        SELECT c.id, c.name, c.slug, c.parent_id
+        FROM categories c
+        WHERE c.id = category_id
+
+        UNION ALL
+
+        SELECT c.id, c.name, c.slug, c.parent_id
+        FROM categories c
+        INNER JOIN CategoryHierarchy ch ON c.parent_id = ch.id
+    )
+    SELECT * FROM CategoryHierarchy;
+END;
+$$ LANGUAGE plpgsql;
