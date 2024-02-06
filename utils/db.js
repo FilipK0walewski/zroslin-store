@@ -104,6 +104,8 @@ async function getProducts(q, categories, sort, page) {
             ${queryConditions}
             ORDER BY ${orderBy} ${direction} LIMIT ${limit} OFFSET ${offset}
         `
+        
+        console.log(query)
         const countQuery = `SELECT COUNT(1) AS count FROM products WHERE 1 = 1${queryConditions}`
         
         const result = await pool.query(query, values)
