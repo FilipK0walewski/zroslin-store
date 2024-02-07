@@ -52,6 +52,31 @@ async function createUser(username, email, password) {
     }
 }
 
+async function getCategoryData(categorySlug) {
+    try {
+        const result = await pool.query('SELECT id, parent_id, name FROM categories WHERE slug = $1', [categorySlug])
+        if (result.rows.length === 0) {
+            return [null, null]
+        }
+        return [result.rows[0].id, result.rows[0].parent_id, result.rows[0].name]
+    } catch (err) {
+        throw err;
+    }
+}
+
+async function getSubcategories(categoryId, parentId) {
+    if (categoryId === null) {
+        const result = await pool.query('SELECT name, slug FROM categories WHERE parent_id is null')
+        return result.rows
+    }
+    const result = await pool.query('SELECT name, slug FROM categories WHERE parent_id = $1', [categoryId])
+    if (result.rows.length !== 0) {
+        return result.rows
+    }
+    const parentResult = await pool.query('SELECT name, slug FROM categories WHERE parent_id = $1', [parentId])
+    return parentResult.rows
+}
+
 async function getCategories(categorySlug) {
     try {
         const result = await pool.query('SELECT * FROM GetCategoryHierarchy($1)', [categorySlug])
@@ -73,14 +98,14 @@ async function getProducts(q, categories, sort, page) {
         let direction = 'ASC'
 
         if (sort) {
-            const matches = sort.match(/^([-+](\w+))$/);            
+            const matches = sort.match(/^([-+](\w+))$/);
             if (matches) {
                 const [sign, column] = matches;
                 orderBy = column
                 direction = sign === '-' ? 'DESC' : 'ASC'
             }
         }
-        
+
         let queryConditions = ''
         const values = []
         if (q) {
@@ -104,10 +129,9 @@ async function getProducts(q, categories, sort, page) {
             ${queryConditions}
             ORDER BY ${orderBy} ${direction} LIMIT ${limit} OFFSET ${offset}
         `
-        
-        console.log(query)
+
         const countQuery = `SELECT COUNT(1) AS count FROM products WHERE 1 = 1${queryConditions}`
-        
+
         const result = await pool.query(query, values)
         const countResult = await pool.query(countQuery, values)
         return [result.rows, Math.ceil(countResult.rows[0].count / limit)];
@@ -125,13 +149,15 @@ async function getProduct(productSlug) {
     }
 }
 
-module.exports = { 
-    getUserByName, 
-    getUserEmailByName, 
-    checkIfUserExistsByName, 
-    checkIfUserExistsByEmail, 
+module.exports = {
+    getUserByName,
+    getUserEmailByName,
+    checkIfUserExistsByName,
+    checkIfUserExistsByEmail,
     createUser,
     getCategories,
     getProducts,
-    getProduct
+    getProduct,
+    getCategoryData,
+    getSubcategories
 };
