@@ -94,15 +94,24 @@ async function getProducts(q, categories, sort, page) {
             offset = (page - 1) * limit;
         }
 
-        let orderBy = 'id';
+        let orderBy = 'name';
         let direction = 'ASC'
 
+        console.log(sort)
         if (sort) {
-            const matches = sort.match(/^([-+](\w+))$/);
-            if (matches) {
-                const [sign, column] = matches;
-                orderBy = column
-                direction = sign === '-' ? 'DESC' : 'ASC'
+            orderBy = sort
+            if (sort[0] === '-') {
+                direction = 'DESC'
+                orderBy = orderBy.substring(1)
+            }
+            console.log(orderBy, direction)
+            if (orderBy === 'cena') {
+                orderBy = 'price'
+            } else if (orderBy === 'alfabetycznie') {
+                orderBy = 'name'
+            } else {
+                orderBy = 'name'
+                direction = 'ASC'
             }
         }
 
@@ -129,6 +138,7 @@ async function getProducts(q, categories, sort, page) {
             ${queryConditions}
             ORDER BY ${orderBy} ${direction} LIMIT ${limit} OFFSET ${offset}
         `
+        console.log(query)
 
         const countQuery = `SELECT COUNT(1) AS count FROM products WHERE 1 = 1${queryConditions}`
 

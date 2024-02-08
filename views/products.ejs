@@ -14,11 +14,12 @@
 
     <main class="w-0 py-0">
 
-        <div class="products-nav py-2">
+        <div class="products-nav" style="padding: 1rem 0;">
 
             <form class="products-search-form" method="GET" action="/produkty">
+
                 <div class="relative">
-                    <input id="search-input" class="input-0" type="text" name="q" autocomplete="off" placeholder=" ">
+                    <input id="search-input" class="input-0" type="text" name="q" autocomplete="off" placeholder=" " <% if (q) { %>value="<%= q %>"<% } %>>
                     <label for="search-input" class="input-label-0">Szukaj produktów</label>
                     <div class="absolute flex-center input-icon">
                         <%- include('partials/svg/search') %>
@@ -26,22 +27,27 @@
                 </div>
 
                 <div class="relative">
-                    <select id="sort-select" class="input-0" required>
-                        <option value="alfabetycznie" selected>Alfabetycznie</option>
-                        <option value="cena">Cena rosnąco</option>
-                        <option value="-cena">Cena malejąco</option>
+                    <select id="sort-select" class="input-0" name="sortowanie" required>
+                        <option value="alfabetycznie" <% if (!sortowanie) { %>selected<% } %>>Alfabetycznie</option>
+                        <option value="cena" <% if (sortowanie === 'cena') { %>selected<% } %>>Cena rosnąco</option>
+                        <option value="-cena" <% if (sortowanie === '-cena') { %>selected<% } %>>Cena malejąco</option>
                     </select>
                     <label for="sort-select" class="input-label-0">Sortowanie</label>
                 </div>
 
+                <% if (kategoria) { %> 
+                    <input type="text" class="hidden" name="kategoria" value="<%= kategoria %>">
+                <% } %> 
+
                 <button type="submit" class="btn-0">Wyszukaj</button>
+
             </form>
 
             <% if (subcategories.length !== 0) { %>
                 <ul class="products-subcategories">
                     <% for (let i = 0; i < subcategories.length; i++) { %>
                         <li>
-                            <a href="/produkty?kategoria=<%= subcategories[i].slug %>"><%= subcategories[i].name %></a>
+                            <a href="/produkty?kategoria=<%= subcategories[i].slug %><% if (sortowanie) { %>&sortowanie=<%= sortowanie %> <% } %>"><%= subcategories[i].name %></a>
                         </li>
                     <% } %>
                 </ul>
@@ -49,20 +55,25 @@
 
         </div>
 
-
-        <div id="products-grid">
-            <% for (let i = 0; i < products.length; i++) { %>
-                <div class="product-grid-item">
-                    <a href="/produkty/<%= products[i].slug %>">
-                        <span><%= products[i].name %></span>
-                        <div class="product-grid-image-container">
-                            <img class="product-grid-image" src="<%= products[i].image %>" alt="<%= products[i].name %>" loading="lazy">
+        <% if (products.length === 0) { %> 
+            <p>Nie znaleziono produktów dla frazy "<%= q %>".</p>
+        <% } else { %> 
+            <div id="products-grid">
+                <% for (let i = 0; i < products.length; i++) { %>
+                    <div class="product-grid-item relative">
+                        <a href="/produkty/<%= products[i].slug %>" class="product-grid-image-container">
+                            <img class="product-grid-image" src="<%= products[i].image %>" alt="Zdjęcie produktu '<%= products[i].name %>'" loading="lazy">
+                        </a>
+                        <div class="product-info-container">
+                            <a href="/produkty/<%= products[i].slug %>" class="product-title"><%= products[i].name %></a>
                         </div>
-                        <span><%= products[i].price %> zł</span>
-                    </a>
-                </div>
-            <% } %>
-        </div>
+                        <span class="product-price"><%= products[i].price %> zł</span>
+                        <a href="/cart/add/<%= products[i].slug %>" class="product-add-to-cart">dodaj do koszyk</a>
+                    </div>
+                <% } %>
+            </div>
+        <% } %> 
+
 
         <% if (numberOfPages > 1) { %>
             <% var paramsHelper = ""; %>
