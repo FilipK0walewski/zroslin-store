@@ -14,39 +14,66 @@
 
     <main class="w-0 py-0">
 
-        <div>Informacje o kategorii.</div>
+        <div class="products-nav" style="padding: 1rem 0;">
 
-        <form class="form-0" style="width: 300px;" method="GET" action="/produkty">
-            <div class="relative">
-                <input id="search-input" class="input-0" type="text" name="q" autocomplete="off" placeholder=" ">
-                <label for="search-input" class="input-label-0">Szukaj produktów</label>
-                <div class="absolute flex-center input-icon">
-                    <%- include('partials/svg/search') %>
+            <form class="products-search-form" method="GET" action="/produkty">
+
+                <div class="relative">
+                    <input id="search-input" class="input-0" type="text" name="q" autocomplete="off" placeholder=" " <% if (q) { %>value="<%= q %>"<% } %>>
+                    <label for="search-input" class="input-label-0">Szukaj produktów</label>
+                    <div class="absolute flex-center input-icon">
+                        <%- include('partials/svg/search') %>
+                    </div>
                 </div>
+
+                <div class="relative">
+                    <select id="sort-select" class="input-0" name="sortowanie" required>
+                        <option value="alfabetycznie" <% if (!sortowanie) { %>selected<% } %>>Alfabetycznie</option>
+                        <option value="cena" <% if (sortowanie === 'cena') { %>selected<% } %>>Cena rosnąco</option>
+                        <option value="-cena" <% if (sortowanie === '-cena') { %>selected<% } %>>Cena malejąco</option>
+                    </select>
+                    <label for="sort-select" class="input-label-0">Sortowanie</label>
+                </div>
+
+                <% if (kategoria) { %> 
+                    <input type="text" class="hidden" name="kategoria" value="<%= kategoria %>">
+                <% } %> 
+
+                <button type="submit" class="btn-0">Wyszukaj</button>
+
+            </form>
+
+            <% if (subcategories.length !== 0) { %>
+                <ul class="products-subcategories">
+                    <% for (let i = 0; i < subcategories.length; i++) { %>
+                        <li>
+                            <a href="/produkty?kategoria=<%= subcategories[i].slug %><% if (sortowanie) { %>&sortowanie=<%= sortowanie %> <% } %>"><%= subcategories[i].name %></a>
+                        </li>
+                    <% } %>
+                </ul>
+            <% } %>
+
+        </div>
+
+        <% if (products.length === 0) { %> 
+            <p>Nie znaleziono produktów dla frazy "<%= q %>".</p>
+        <% } else { %> 
+            <div id="products-grid">
+                <% for (let i = 0; i < products.length; i++) { %>
+                    <div class="product-grid-item relative">
+                        <a href="/produkty/<%= products[i].slug %>" class="product-grid-image-container">
+                            <img class="product-grid-image" src="<%= products[i].image %>" alt="Zdjęcie produktu '<%= products[i].name %>'" loading="lazy">
+                        </a>
+                        <div class="product-info-container">
+                            <a href="/produkty/<%= products[i].slug %>" class="product-title"><%= products[i].name %></a>
+                        </div>
+                        <span class="product-price"><%= products[i].price %> zł</span>
+                        <a href="/cart/add/<%= products[i].slug %>" class="product-add-to-cart">dodaj do koszyk</a>
+                    </div>
+                <% } %>
             </div>
+        <% } %> 
 
-            <select name="sortowanie" id="">
-                <option value="cena">cena rosnąco</option>
-                <option value="-cena">cena mareląco</option>
-            </select>
-
-            <button type="submit" class="btn-0">Wyszukaj</button>
-        </form>
-
-        <form action="/produkty" method="GET">
-            <% if (strona && strona !== 1) { %>
-                <a href="/produkty?" aria-disabled="true">poprzednia</a>
-            <% } %>
-            <% if (kategoria) { %>
-                <input type="text" name="kategoria" value="<%= kategoria %>" class="hidden">
-            <% } %>
-            <% if (q) { %>
-                <input type="text" name="q" value="<%= q %>" class="hidden">
-            <% } %>
-            <% if (sortowanie) { %>
-                <input type="text" name="sortowanie" value="<%= sortowanie %>" class="hidden">
-            <% } %>
-        </form>
 
         <% if (numberOfPages > 1) { %>
             <% var paramsHelper = ""; %>
@@ -60,71 +87,49 @@
                 <% paramsHelper += `sortowanie=${sortowanie}&`; %>
             <% } %>
 
-            <p>strona: <%= strona %></p>
             <ul id="products-pagination">
-                <% if (strona !== 1) { %>
-                    <li>
-                        <a href="/produkty?<%= paramsHelper %>strona=<%= strona - 1 %>">poprzednia</a>
-                    </li>
-                <% } %>
-                <% if (numberOfPages >= 2 && numberOfPages <= 5) { %>
-                    <% for (let i = 1; i <= numberOfPages; i++) { %>
+
+                <% if (numberOfPages <= 7) { %>
+                    <% for (let i = 1; i <= 7; i++) { %> 
                         <li>
                             <a href="/produkty?<%= paramsHelper %>strona=<%= i %>"><%= i %></a>
                         </li>
-                    <% } %>
+                    <% } %> 
                 <% } else { %>
                     <li><a href="/produkty?<%= paramsHelper %>strona=1">1</a></li>
-                    <% if (strona <= 3) { %>
-                        <% for (let i = 2; i <= 4; i++) { %>
+
+                    <% if (strona <= 5 && strona >= 1) { %> 
+                        <li><a href="/produkty?<%= paramsHelper %>strona=2">2</a></li>
+                        <li><a href="/produkty?<%= paramsHelper %>strona=3">3</a></li>
+                        <li><a href="/produkty?<%= paramsHelper %>strona=4">4</a></li>
+                        <li><a href="/produkty?<%= paramsHelper %>strona=5">5</a></li>
+                        <li><a href="/produkty?<%= paramsHelper %>strona=6">6</a></li>
+                        <li><a href="/produkty?<%= paramsHelper %>strona=7">7</a></li>
+                        <span>...</span>
+                    <% } else if (strona <= numberOfPages - 5 && strona > 5) { %> 
+                        <span>...</span>
+                        <% for (let i = strona - 2; i <= strona + 2; i++) { %>
                             <li>
                                 <a href="/produkty?<%= paramsHelper %>strona=<%= i %>"><%= i %></a>
                             </li>
                         <% } %>
+                        <span>...</span>
                     <% } else { %>
-                        <li>...</li>
-                    <% } %>
-                    <% if (strona > 3 && strona < numberOfPages - 3) { %>
-                        <% for (let i = strona - 1; i <= strona + 1; i++) { %>
-                            <li>
-                                <a href="/produkty?<%= paramsHelper %>strona=<%= i %>"><%= i %></a>
-                            </li>
-                        <% } %>
-                    <% } %>
-                    <% if (strona >= numberOfPages - 3) { %>
-                        <% for (let i = numberOfPages - 4; i <= numberOfPages - 1; i++) { %>
-                            <li>
-                                <a href="/produkty?<%= paramsHelper %>strona=<%= i %>"><%= i %></a>
-                            </li>
-                        <% } %>
-                    <% } else { %>
-                        <li>...</li>
+                        <span>...</span>
+                        <li><a href="/produkty?<%= paramsHelper %>strona=<%= numberOfPages - 6 %>"><%= numberOfPages - 6 %></a></li>
+                        <li><a href="/produkty?<%= paramsHelper %>strona=<%= numberOfPages - 5 %>"><%= numberOfPages - 5 %></a></li>
+                        <li><a href="/produkty?<%= paramsHelper %>strona=<%= numberOfPages - 4 %>"><%= numberOfPages - 4 %></a></li>
+                        <li><a href="/produkty?<%= paramsHelper %>strona=<%= numberOfPages - 3 %>"><%= numberOfPages - 3 %></a></li>
+                        <li><a href="/produkty?<%= paramsHelper %>strona=<%= numberOfPages - 2 %>"><%= numberOfPages - 2 %></a></li>
+                        <li><a href="/produkty?<%= paramsHelper %>strona=<%= numberOfPages - 1 %>"><%= numberOfPages - 1 %></a></li>
                     <% } %>
                     <li>
                         <a href="/produkty?<%= paramsHelper %>strona=<%= numberOfPages %>"><%= numberOfPages %></a>
                     </li>
                 <% } %>
-                <% if (strona !== numberOfPages) { %>
-                    <li>
-                        <a href="/produkty?<%= paramsHelper %>strona=<%= strona + 1 %>">następna</a>
-                    </li>
-                <% } %>
+
             </ul>            
         <% } %>
-
-        <div id="products-grid">
-            <% for (let i = 0; i < products.length; i++) { %>
-                <div class="product-grid-item">
-                    <a href="/produkty/<%= products[i].slug %>">
-                        <span><%= products[i].name %></span>
-                        <div class="product-grid-image-container">
-                            <img class="product-grid-image" src="<%= products[i].image %>" alt="<%= products[i].name %>" loading="lazy">
-                        </div>
-                        <span><%= products[i].price %> zł</span>
-                    </a>
-                </div>
-            <% } %>
-        </div>
 
     </main>
 

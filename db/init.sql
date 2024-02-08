@@ -91,14 +91,14 @@ CREATE TABLE IF NOT EXISTS users (
     created_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
-CREATE OR REPLACE FUNCTION GetCategoryHierarchy(category_id INT) 
+CREATE OR REPLACE FUNCTION GetCategoryHierarchy(category_slug VARCHAR(255)) 
 RETURNS TABLE (id INT, name VARCHAR(50), slug VARCHAR(255), parent_id INT) AS $$
 BEGIN
     RETURN QUERY
     WITH RECURSIVE CategoryHierarchy AS (
         SELECT c.id, c.name, c.slug, c.parent_id
         FROM categories c
-        WHERE c.id = category_id
+        WHERE c.slug = category_slug
 
         UNION ALL
 

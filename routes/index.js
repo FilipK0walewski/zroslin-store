@@ -14,15 +14,21 @@ router.get('/', (req, res) => {
 })
 
 router.get('/produkty', async (req, res) => {
-  console.log(0)
   let { q, kategoria, sortowanie, strona } = req.query;
+  if (typeof q === 'string' && q.length === 0) {
+    let redirectString = '/produkty', queryParams = [];
+    if (kategoria) { queryParams.push(`kategoria=${kategoria}`) }
+    if (sortowanie) { queryParams.push(`sortowanie=${sortowanie}`) }
+    if (strona) { queryParams.push(`strona=${strona}`) }
+    if (queryParams.length !== 0) redirectString = redirectString + '?' + queryParams.join('&')
+    return res.redirect(redirectString)
+  }
   strona = parseInt(strona) || 1
-  console.log(q, kategoria, sortowanie, strona)
+  const [categoryId, categoryParentId, categoryName] = await db.getCategoryData(kategoria)
+  const subcategories = await db.getSubcategories(categoryId, categoryParentId)
   const categories = await db.getCategories(kategoria);
-  console.log('categories', categories.length)
   const [products, numberOfPages] = await db.getProducts(q, categories, sortowanie, strona)
-  console.log('pages', numberOfPages)
-  res.render('products', { products, numberOfPages, q, kategoria, sortowanie, strona })
+  res.render('products', { products, subcategories, numberOfPages, q, kategoria, sortowanie, strona })
 })
 
 router.get('/produkty/:slug', async (req, res) => {
