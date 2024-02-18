@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        <%= product.name %>
+    </title>
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+</head>
+
+<body>
+    <%- include('partials/header') %>
+
+    <main class="w-0 py-0">
+
+        <% if (images.length !==0) { %>
+            <div class="gallery">
+                <% for (let i=0; i < images.length; i++) { %>
+                    <div class="gallery-item">
+                        <input type="radio" id="img-<%= i %>" name="gallery" class="gallery-selector" checked />
+                        <div class="gallery-img-container">
+                            <img class="gallery-img" src="<%= images[i].url %>" />
+                        </div>
+                        <label for="img-<%= i %>" class="gallery-thumb">
+                            <img src="<%= images[i].url %>" />
+                        </label>
+                    </div>
+                <% } %>
+            </div>
+        <% } %>
+
+        <h1><%= product.name %></h1>
+        <%- product.description %>
+    </main>
+
+    <%- include('partials/footer') %>
+</body>
+
+</html>

@@ -15,6 +15,7 @@ router.get('/', (req, res) => {
 
 router.get('/produkty', async (req, res) => {
   let { q, kategoria, sortowanie, strona } = req.query;
+  strona = parseInt(strona) || 1
   if (typeof q === 'string' && q.length === 0) {
     let redirectString = '/produkty', queryParams = [];
     if (kategoria) { queryParams.push(`kategoria=${kategoria}`) }
@@ -23,7 +24,6 @@ router.get('/produkty', async (req, res) => {
     if (queryParams.length !== 0) redirectString = redirectString + '?' + queryParams.join('&')
     return res.redirect(redirectString)
   }
-  strona = parseInt(strona) || 1
   const [categoryId, categoryParentId, categoryName] = await db.getCategoryData(kategoria)
   const subcategories = await db.getSubcategories(categoryId, categoryParentId)
   const categories = await db.getCategories(kategoria);
@@ -32,11 +32,11 @@ router.get('/produkty', async (req, res) => {
 })
 
 router.get('/produkty/:slug', async (req, res) => {
-  const product = await db.getProduct(req.params.slug)
+  const [product, images] = await db.getProductData(req.params.slug)
   if (product === null) {
     return res.send('404')
   }
-  res.send(product.name)
+  res.render('product', { product, images })
 })
 
 router.get('/konto', async (req, res) => {

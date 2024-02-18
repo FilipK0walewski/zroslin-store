@@ -150,10 +150,14 @@ async function getProducts(q, categories, sort, page) {
     }
 }
 
-async function getProduct(productSlug) {
+async function getProductData(productSlug) {
     try {
-        const result = await pool.query('SELECT * FROM products WHERE slug = $1', [productSlug])
-        return result.rows.length === 0 ? null : result.rows[0]
+        const result = await pool.query('SELECT id, name, description, quantity, stock, price, color FROM products WHERE slug = $1', [productSlug])
+        if (result.rows.length === 0) {
+            return [null, null]
+        }
+        const imageResult = await pool.query('SELECT url FROM images WHERE product_id = $1', [result.rows[0].id])
+        return [result.rows[0], imageResult.rows]
     } catch (err) {
         throw err;
     }
@@ -167,7 +171,7 @@ module.exports = {
     createUser,
     getCategories,
     getProducts,
-    getProduct,
+    getProductData,
     getCategoryData,
     getSubcategories
 };
