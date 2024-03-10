@@ -68,7 +68,12 @@
                             <a href="/produkty/<%= products[i].slug %>" class="product-title"><%= products[i].name %></a>
                         </div>
                         <span class="product-price"><%= products[i].price %> zł</span>
-                        <a href="/cart/add/<%= products[i].slug %>" class="product-add-to-cart">dodaj do koszyk</a>
+
+                        <form method="POST" action="/koszyk/<%= products[i].slug %>" class="product-add-to-cart">
+                            <input type="number" name="ilosc" value="1" class="hidden">
+                            <button type="submit">dodaj do koszyk</button>
+                        </form>
+
                     </div>
                 <% } %>
             </div>

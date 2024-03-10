@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zroślin</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+</head>
+
+<body>
+    <%- include('partials/header') %>
+
+    <main class="w-0 py-0">
+        <h1>Twój koszyk</h1>
+        <% if (cart.length === 0) { %> 
+            <p>Pusto...</p>
+            <a href="/produkty">rób zakupy</a>
+        <% } else { %> 
+            <ul class="cart-list">
+                <% for( let i = 0; i < cart.length; i++ ) { %>
+                    <li class="cart-item">
+                        <div>
+                            <div class="cart-img-container">
+                                <img src="<%= cart[i].image %>" alt="<%= cart[i].name %>" class="fit-img">
+                            </div>
+                            <span><%= cart[i].name %></span>
+                        </div>
+
+                        <div class="px-0">
+                            <span><%= cart[i].price %></span>
+
+                            <form method="POST" action="/koszyk/<%= cart[i].slug %> ">
+                                <input type="number" value="<%= cart[i].userNumber - 1 %>" name="ilosc" class="hidden">
+                                <button <% if (cart[i].userNumber === 1) { %> disabled <% } %>>-</button>
+                            </form>
+
+                            <span>ilość: <%= cart[i].userNumber %></span>
+
+                            <form method="POST" action="/koszyk/<%= cart[i].slug %> ">
+                                <input type="number" value="<%= cart[i].userNumber + 1 %>" name="ilosc" class="hidden">
+                                <button <% if (cart[i].stock === 1 || cart[i].userNumber + 1 === cart[i].stock) { %> disabled <% } %>>+</button>
+                            </form>
+
+                            <form method="POST" action="/koszyk/usun/<%= cart[i].slug %>">
+                                <button type="submit">usuń</button>
+                            </form>
+                        </div>
+                    </li>
+                <% } %>
+            </ul>
+            <p>Łączna kwota pieniędzy: <%= totalAmount %> zł</p>
+            <a href="/dostawa">przejdź do dostawy</a>
+        <% } %>
+    </main>
+
+    <%- include('partials/footer') %>
+</body>
+
+</html>

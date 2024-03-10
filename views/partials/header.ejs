@@ -72,7 +72,14 @@
         <div class="flex-center">
 
             <a href="/konto" class="flex-center a-icon"><%- include('svg/person') %></a>
-            <a href="/koszyk" class="flex-center a-icon ml-0"><%- include('svg/cart') %></a>
+
+            <a href="/koszyk" class="flex-center a-icon ml-0 relative">
+                <%- include('svg/cart') %>
+                <% if (cartCount && cartCount !== 0) { %> 
+                    <div class="cart-count"><%= cartCount %></div>
+                <% } %>
+            </a>
+
             <label for="burgir-checkbox" id="burgir-checkbox-label" class="flex-center ml-0 hidden-desktop">
                 <%- include('svg/hamburger') %>
             </label>

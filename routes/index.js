@@ -3,11 +3,12 @@ const express = require('express');
 const db = require('../utils/db');
 const { generateToken, verifyToken } = require('../utils/jwtHelper');
 const { hashPassword, doPasswordsMatch } = require('../utils/bcryptHelper');
-const { globalMessagesMiddleware } = require('../utils/middlewares')
+const { cartMiddleware, globalMessagesMiddleware } = require('../utils/middlewares')
 
 const router = express.Router()
 router.use(verifyToken)
 router.use(globalMessagesMiddleware)
+router.use(cartMiddleware)
 
 router.get('/', (req, res) => {
   res.render('index')
@@ -15,6 +16,7 @@ router.get('/', (req, res) => {
 
 router.get('/produkty', async (req, res) => {
   let { q, kategoria, sortowanie, strona } = req.query;
+  strona = parseInt(strona) || 1
   if (typeof q === 'string' && q.length === 0) {
     let redirectString = '/produkty', queryParams = [];
     if (kategoria) { queryParams.push(`kategoria=${kategoria}`) }
@@ -23,7 +25,6 @@ router.get('/produkty', async (req, res) => {
     if (queryParams.length !== 0) redirectString = redirectString + '?' + queryParams.join('&')
     return res.redirect(redirectString)
   }
-  strona = parseInt(strona) || 1
   const [categoryId, categoryParentId, categoryName] = await db.getCategoryData(kategoria)
   const subcategories = await db.getSubcategories(categoryId, categoryParentId)
   const categories = await db.getCategories(kategoria);
@@ -32,11 +33,11 @@ router.get('/produkty', async (req, res) => {
 })
 
 router.get('/produkty/:slug', async (req, res) => {
-  const product = await db.getProduct(req.params.slug)
+  const [product, images] = await db.getProductData(req.params.slug)
   if (product === null) {
     return res.send('404')
   }
-  res.send(product.name)
+  res.render('product', { product, images })
 })
 
 router.get('/konto', async (req, res) => {
@@ -103,8 +104,31 @@ router.get('/logout', (req, res) => {
   res.redirect('/');
 })
 
-router.get('/cart', (req, res) => {
-  res.send('Twój koszyk')
+router.get('/koszyk', async (req, res) => {
+  let cart = [], totalAmount = 0
+  const slugList = Object.keys(req.session.cart)
+  for (let i = 0; i < slugList.length; i++) {
+    const slug = slugList[i]
+    let product = await db.getProductDataForCart(slug)
+    product['userNumber'] = req.session.cart[slug]
+    totalAmount += product.price * product['userNumber']
+    cart.push(product)
+  }
+  res.render('cart', { cart, totalAmount })
+})
+
+router.post('/koszyk/:slug', (req, res) => {
+  res.addProductToCart(req.params.slug, req.body.ilosc)
+  res.redirect(`/koszyk`)
+})
+
+router.post('/koszyk/usun/:slug', (req, res) => {
+  res.deleteProductFromCart(req.params.slug)
+  res.redirect('/koszyk')
+})
+
+router.get('/dostawa', (req, res) => {
+  res.render('shipping')
 })
 
 router.get('/contact', (req, res) => {

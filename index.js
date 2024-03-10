@@ -24,5 +24,5 @@ app.use(session({
 app.use('/', shop);
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
+  (`Example app listening on port ${port}`);
 });
