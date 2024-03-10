@@ -16,24 +16,51 @@
 
     <main class="w-0 py-0">
 
+        <h1><%= product.name %></h1>
+
         <% if (images.length !==0) { %>
             <div class="gallery">
                 <% for (let i=0; i < images.length; i++) { %>
                     <div class="gallery-item">
-                        <input type="radio" id="img-<%= i %>" name="gallery" class="gallery-selector" checked />
+
+                        <input type="radio" id="img-<%= i %>" name="gallery" class="gallery-selector" <% if (i === 0) { %> checked <% } %> />
+
                         <div class="gallery-img-container">
-                            <img class="gallery-img" src="<%= images[i].url %>" />
+                            <% if (i !== 0) { %> 
+                                <label class="gallery-btn gallery-left-btn" for="img-<%= i-1 %>">
+                                    <%- include('partials/svg/arrow-left') %>
+                                </label>
+                            <% } %> 
+                            <img class="gallery-img" src="<%= images[i].url %>" loading="lazy" />
+                            <% if (i !== images.length - 1) { %> 
+                                <label class="gallery-btn gallery-right-btn" for="img-<%= i+1 %>">
+                                    <%- include('partials/svg/arrow-right') %>
+                                </label>
+                            <% } %> 
                         </div>
-                        <label for="img-<%= i %>" class="gallery-thumb">
-                            <img src="<%= images[i].url %>" />
-                        </label>
+
                     </div>
                 <% } %>
             </div>
+
         <% } %>
 
-        <h1><%= product.name %></h1>
-        <%- product.description %>
+        <div class="box my-0">
+            <form method="POST" action="/koszyk/<%= product.slug %>" class="cart-form">
+                <span><%= product.price %> zł</span>
+                <% if (product.stock === 0) { %> 
+                    <span>produkt niedostępny</span>
+                <% } else { %>
+                    <span>dostępna ilość: <%= product.stock %> </span>
+                    <input type="number" name="ilosc" class="input-0" value="1" min="1" max="<%= product.stock %>">
+                    <button type="submit" class="btn-0">dodaj do koszyka</button>
+                <% } %> 
+            </form>
+        </div>
+
+        <div class="box product-description">
+            <%- product.description %>
+        </div>
     </main>
 
     <%- include('partials/footer') %>

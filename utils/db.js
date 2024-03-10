@@ -97,14 +97,12 @@ async function getProducts(q, categories, sort, page) {
         let orderBy = 'name';
         let direction = 'ASC'
 
-        console.log(sort)
         if (sort) {
             orderBy = sort
             if (sort[0] === '-') {
                 direction = 'DESC'
                 orderBy = orderBy.substring(1)
             }
-            console.log(orderBy, direction)
             if (orderBy === 'cena') {
                 orderBy = 'price'
             } else if (orderBy === 'alfabetycznie') {
@@ -138,7 +136,6 @@ async function getProducts(q, categories, sort, page) {
             ${queryConditions}
             ORDER BY ${orderBy} ${direction} LIMIT ${limit} OFFSET ${offset}
         `
-        console.log(query)
 
         const countQuery = `SELECT COUNT(1) AS count FROM products WHERE 1 = 1${queryConditions}`
 
@@ -152,12 +149,27 @@ async function getProducts(q, categories, sort, page) {
 
 async function getProductData(productSlug) {
     try {
-        const result = await pool.query('SELECT id, name, description, quantity, stock, price, color FROM products WHERE slug = $1', [productSlug])
+        const result = await pool.query('SELECT id, slug, name, description, quantity, stock, price, color FROM products WHERE slug = $1', [productSlug])
         if (result.rows.length === 0) {
             return [null, null]
         }
         const imageResult = await pool.query('SELECT url FROM images WHERE product_id = $1', [result.rows[0].id])
         return [result.rows[0], imageResult.rows]
+    } catch (err) {
+        throw err;
+    }
+}
+
+async function getProductDataForCart(productSlug) {
+    try {
+        const result = await pool.query('SELECT id, slug, name, quantity, stock, price FROM products WHERE slug = $1', [productSlug])
+        if (result.rows.length === 0) {
+            return [null, null]
+        }
+        let data = result.rows[0]
+        const imageResult = await pool.query('SELECT url FROM images WHERE product_id = $1 limit 1', [result.rows[0].id])
+        data['image'] = imageResult.rows[0].url
+        return data
     } catch (err) {
         throw err;
     }
@@ -172,6 +184,7 @@ module.exports = {
     getCategories,
     getProducts,
     getProductData,
+    getProductDataForCart,
     getCategoryData,
     getSubcategories
 };

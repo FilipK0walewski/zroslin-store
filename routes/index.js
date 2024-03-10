@@ -3,11 +3,12 @@ const express = require('express');
 const db = require('../utils/db');
 const { generateToken, verifyToken } = require('../utils/jwtHelper');
 const { hashPassword, doPasswordsMatch } = require('../utils/bcryptHelper');
-const { globalMessagesMiddleware } = require('../utils/middlewares')
+const { cartMiddleware, globalMessagesMiddleware } = require('../utils/middlewares')
 
 const router = express.Router()
 router.use(verifyToken)
 router.use(globalMessagesMiddleware)
+router.use(cartMiddleware)
 
 router.get('/', (req, res) => {
   res.render('index')
@@ -103,8 +104,31 @@ router.get('/logout', (req, res) => {
   res.redirect('/');
 })
 
-router.get('/cart', (req, res) => {
-  res.send('Twój koszyk')
+router.get('/koszyk', async (req, res) => {
+  let cart = [], totalAmount = 0
+  const slugList = Object.keys(req.session.cart)
+  for (let i = 0; i < slugList.length; i++) {
+    const slug = slugList[i]
+    let product = await db.getProductDataForCart(slug)
+    product['userNumber'] = req.session.cart[slug]
+    totalAmount += product.price * product['userNumber']
+    cart.push(product)
+  }
+  res.render('cart', { cart, totalAmount })
+})
+
+router.post('/koszyk/:slug', (req, res) => {
+  res.addProductToCart(req.params.slug, req.body.ilosc)
+  res.redirect(`/koszyk`)
+})
+
+router.post('/koszyk/usun/:slug', (req, res) => {
+  res.deleteProductFromCart(req.params.slug)
+  res.redirect('/koszyk')
+})
+
+router.get('/dostawa', (req, res) => {
+  res.render('shipping')
 })
 
 router.get('/contact', (req, res) => {
