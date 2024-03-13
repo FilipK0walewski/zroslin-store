@@ -50,7 +50,7 @@ router.get('/konto', async (req, res) => {
 
 router.get('/logowanie', (req, res) => {
   if (req.user) {
-    res.locals.test = 'Jesteś już zalogowany.'
+    // res.locals.test = 'Jesteś już zalogowany.'
     return res.redirect('/konto')
   }
   res.render('login');
@@ -128,7 +128,7 @@ router.post('/koszyk/usun/:slug', (req, res) => {
 })
 
 router.get('/dostawa', (req, res) => {
-  res.render('shipping')
+  res.render('shipping', { user: req.user })
 })
 
 router.get('/contact', (req, res) => {

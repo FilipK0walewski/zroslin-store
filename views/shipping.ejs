@@ -14,6 +14,46 @@
 
     <main class="w-0 py-0">
         <h1>Dane dostawy</h1>
+        <% if (!user) { %>
+            <span>
+                <a href="/logowanie">zaloguj się</a>
+                lub kontunuuj jako gość
+            </span>
+        <% } %>
+
+        <form method="POST" action="/dostawa" class="shipping-form">
+            <div class="relative">
+                <input id="name-input" class="input-0" type="text" name="imie" autocomplete="off"
+                    placeholder=" " required>
+                <label for="name-input" class="input-label-0">Imię</label>
+            </div>
+
+            <div class="relative">
+                <input id="surname-input" class="input-0" type="text" name="nazwisko" autocomplete="off"
+                    placeholder=" " required>
+                <label for="surname-input" class="input-label-0">Nazwisko</label>
+            </div>
+
+            <div class="relative">
+                <input id="phone-input" class="input-0" type="text" name="telefon" autocomplete="off"
+                    placeholder=" " required>
+                <label for="phone-input" class="input-label-0">Telefon</label>
+            </div>
+
+            <div class="relative">
+                <input id="phone-input" class="input-0" type="text" name="telefon" autocomplete="off"
+                    placeholder=" " required>
+                <label for="phone-input" class="input-label-0">Telefon</label>
+            </div>
+
+            <div class="relative">
+                <input id="zipcode-input" pattern="[0-9]{5}" class="input-0" type="text" name="zipcode" autocomplete="off"
+                    placeholder=" " required>
+                <label for="zipcode-input" class="input-label-0">Kod pocztowy</label>
+            </div>
+
+
+        </form>
     </main>
 
     <%- include('partials/footer') %>

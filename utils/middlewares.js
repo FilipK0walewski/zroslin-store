@@ -14,6 +14,10 @@ function globalMessagesMiddleware(req, res, next) {
     next()
 }
 
+function authMiddleware(req, res, next) {
+    
+}
+
 function cartMiddleware(req, res, next) {
     if (!req.session.cart) {
         req.session.cart = {}
