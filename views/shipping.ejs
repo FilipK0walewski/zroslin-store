@@ -13,7 +13,100 @@
     <%- include('partials/header') %>
 
     <main class="w-0 py-0">
-        <h1>Dane dostawy</h1>
+
+        <div class="flex-between py0">
+            <h3>Dane dostawy</h3>
+            <a href="/koszyk" class="secondary-button">powrót do koszyka</a>
+        </div>
+
+
+        
+        <!-- <% if (!user) { %>
+            <div class="my-0">
+                <p>
+                    <a href="/logowanie">Zaloguj się</a>
+                    lub kontunuuj jako gość.
+                </p>
+            </div>
+        <% } %> -->
+
+        <% if (typeof validationMessage != 'undefined' && validationMessage) { %> 
+            <p><%= validationMessage %></p>
+        <% } %> 
+
+
+        <form method="POST" action="/dostawa" class="space-y-1">
+            <div class="nice-input-container">
+                <input id="name-input" class="nice-input" type="text" name="name" autocomplete="off"
+                    placeholder=" " required <% if (shippingData) { %> value="<%= shippingData.name %>" <% } %>>
+                <label for="name-input" class="nice-input-label">Imię</label>
+            </div>
+
+            <div class="nice-input-container">
+                <input id="surname-input" class="nice-input" type="text" name="surname" autocomplete="off"
+                    placeholder=" " required <% if (shippingData) { %> value="<%= shippingData.surname %>" <% } %>>
+                <label for="surname-input" class="nice-input-label">Nazwisko</label>
+            </div>
+
+            <div class="nice-input-container">
+                <input id="phone-input" class="nice-input" type="tel" name="phone" autocomplete="off"
+                    placeholder=" " required <% if (shippingData) { %> value="<%= shippingData.phone %>" <% } %>>
+                <label for="phone-input" class="nice-input-label">Telefon</label>
+            </div>
+
+            <div class="nice-input-container">
+                <input id="email-input" class="nice-input" type="email" name="email" autocomplete="off"
+                    placeholder=" " required <% if (shippingData) { %> value="<%= shippingData.email %>" <% } %>>
+                <label for="email-input" class="nice-input-label">E-mail</label>
+            </div>
+
+            <div class="address-div-2">
+                <div class="nice-input-container">
+                    <input id="city-input" class="nice-input" type="text" name="city" autocomplete="off"
+                        placeholder=" " required <% if (shippingData) { %> value="<%= shippingData.city %>" <% } %>>
+                    <label for="city-input" class="nice-input-label">Miasto</label>
+                </div>
+
+                <div class="nice-input-container">
+                    <input id="zipcode-input" class="nice-input" type="text" name="zipcode" max="6" autocomplete="off"
+                        placeholder=" " required <% if (shippingData) { %> value="<%= shippingData.zipcode %>" <% } %>>
+                    <label for="zipcode-input" class="nice-input-label">Kod pocztowy</label>
+                </div>
+            </div>
+
+            <div class="address-div-3">
+                <div class="nice-input-container">
+                    <input id="street-input" class="nice-input" type="text" name="street" autocomplete="off"
+                        placeholder=" " required <% if (shippingData) { %> value="<%= shippingData.street %>" <% } %>>
+                    <label for="street-input" class="nice-input-label">Ulica</label>
+                </div>
+
+                <div class="nice-input-container">
+                    <input id="building-input" class="nice-input" type="text" name="building" autocomplete="off"
+                        placeholder=" " required <% if (shippingData) { %> value="<%= shippingData.building %>" <% } %>>
+                    <label for="building-input" class="nice-input-label">Numer budynku</label>
+                </div>
+
+                <div class="nice-input-container">
+                    <input id="flat-input" class="nice-input" type="text" name="flat" autocomplete="off"
+                        placeholder=" " <% if (shippingData) { %> value="<%= shippingData.flat %>" <% } %>>
+                    <label for="flat-input" class="nice-input-label">Numer mieszkania</label>
+                </div>
+            </div>
+
+            <div class="nice-input-container">
+                <select id="shipping-method" name="shippingMethod" class="nice-input" required>
+                    <option value="inpostCourier" <% if (shippingData && shippingData.shippingMethod === 'inpostCourier') { %>selected<% } %>>Kurier Inpost(15,76zł)</option>
+                    <option value="inpostBox" disabled>Paczkomat Inpost(niedostępne)</option>
+
+                </select>
+                <label for="shipping-method" class="nice-input-label">Metoda dostawy</label>
+            </div>
+
+            <button type="submit" class="primary-button">Przejdź do podsumowania</button>
+
+        </form>
+
     </main>
 
     <%- include('partials/footer') %>

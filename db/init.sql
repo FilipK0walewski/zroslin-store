@@ -42,7 +42,6 @@ CREATE TABLE IF NOT EXISTS products(
     name VARCHAR(255) NOT NULL,
     slug VARCHAR(255) UNIQUE NOT NULL,
     price REAL NOT NULL,
-    stock INT NOT NULL DEFAULT 0,
     tax_rate INT NOT NULL,
     color VARCHAR(20),
     category_id INT NOT NULL,
@@ -88,7 +87,12 @@ CREATE TABLE IF NOT EXISTS users (
     username VARCHAR(60) UNIQUE NOT NULL,
     email VARCHAR(60) UNIQUE NOT NULL,
     password VARCHAR(255) UNIQUE NOT NULL,
-    created_at TIMESTAMP NOT NULL DEFAULT NOW()
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE sessions (
+    session_id TEXT PRIMARY KEY,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE OR REPLACE FUNCTION GetCategoryHierarchy(category_slug VARCHAR(255)) 
@@ -109,3 +113,52 @@ BEGIN
     SELECT * FROM CategoryHierarchy;
 END;
 $$ LANGUAGE plpgsql;
+
+CREATE TABLE IF NOT EXISTS addresses (
+    id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    first_name VARCHAR(50) NOT NULL,
+    second_name VARCHAR(50) NOT NULL,
+    phone VARCHAR(12) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    city VARCHAR(50) NOT NULL,
+    zipcode VARCHAR(6) NOT NULL,
+    street VARCHAR(50) NOT NULL,
+    building VARCHAR(10) NOT NULL,
+    flat VARCHAR(10)
+);
+
+CREATE TABLE IF NOT EXISTS orders (
+    id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    url_id TEXT UNIQUE NOT NULL,
+    shipping_method TEXT NOT NULL,
+    user_id INT,
+    session_id TEXT NOT NULL,
+    address_id INT NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (session_id) REFERENCES sessions(session_id),
+    FOREIGN KEY (address_id) REFERENCES addresses(id)
+);
+
+CREATE TABLE IF NOT EXISTS order_items (
+    id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    order_id INT NOT NULL,
+    product_id INT NOT NULL,
+    quantity INT NOT NULL,
+    price REAL NOT NULL,
+    FOREIGN KEY (order_id) REFERENCES orders(id),
+    FOREIGN KEY (product_id) REFERENCES products(id)
+);
+
+CREATE TABLE IF NOT EXISTS payments (
+    id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    amount INT NOT NULL,
+    currency VARCHAR(3) NOT NULL,
+    stripe_payment_id TEXT UNIQUE NOT NULL,
+    client_secret TEXT UNIQUE NOT NULL,
+    order_id INT UNIQUE NOT NULL,
+    status VARCHAR(50) NOT NULL,
+    redirect_status VARCHAR(50),
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (order_id) REFERENCES orders(id)
+);

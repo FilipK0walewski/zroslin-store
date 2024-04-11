@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Podsumowanie</title>
+    <link rel="stylesheet" href="css/main.css">
+    <script src="https://js.stripe.com/v3/"></script>
+    <script src="js/checkout.js" defer></script>
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+</head>
+
+<body>
+    <%- include('partials/header') %>
+
+    <main class="w-0 py-0 mta-0">
+
+        <ul class="cart-list nice-box mt-0">
+
+            <div class="flex-between">
+                <p class="bold">Przedmioty</p>
+                <a href="/koszyk" class="secondary-button">edytuj</a>
+            </div>
+
+            <% for( let i = 0; i < cart.length; i++ ) { %>
+                <li class="cart-item">
+                    <div class="flex">
+                        <a href="/produkty/<%= cart[i].slug %>">
+                            <div class="cart-img-container">
+                                <img src="<%= cart[i].image %>" alt="<%= cart[i].name %>" class="fit-img">
+                            </div>
+                        </a>
+                        
+                        <div class="flex-column">
+                            <a href="/produkty/<%= cart[i].slug %>" class="bold"><%= cart[i].name %></a>
+                            <span><%= cart[i].price %> zł</span>
+                        </div>
+                    </div>
+
+                    <div class="px-0">
+                        <span class="small-text">ilość: <%= cart[i].userNumber %></span>
+                    </div>
+                </li>
+            <% } %>
+        </ul>
+
+        <div class="nice-box">
+            <div class="flex-between">
+                <p class="bold">Dane dostawy</p>
+                <a href="/dostawa" class="secondary-button">edytuj</a>
+            </div>
+            <p><%= shippingData.name %> <%= shippingData.surname %></p>
+            <p>tel: <%= shippingData.phone %></p>
+            <p>email: <%= shippingData.email %></p>
+            <p><%= shippingData.city %> <%= shippingData.zipcode %></p>
+            <p>ul. <%= shippingData.street %> <%= shippingData.building %><% if (shippingData.flat) { %> / <%= shippingData.flat %><% } %></p>
+        </div>
+
+        <form id="payment-form" data-secret="<%= clientSecret %>">
+            <div id="payment-element"></div>
+            <br>
+            <div class="flex-end">
+                <button id="submit" class="primary-button">
+                    <div class="spinner hidden" id="spinner"></div>
+                    <span id="button-text">Zapłać</span>
+                </button>
+            </div>
+            <div id="payment-message" class="hidden"></div>
+        </form>
+    </main>
+
+    <%- include('partials/footer') %>
+</body>
+
+</html>

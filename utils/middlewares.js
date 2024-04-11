@@ -1,3 +1,15 @@
+const db = require('../utils/db');
+
+async function sessionMiddleware(req, res, next) {
+    if (req.session) {
+        if (!req.session.isSavedInDb) {
+            await db.saveSessionId(req.session.id)
+            req.session.isSavedInDb = true
+        }
+    }
+    next()
+}
+
 function globalMessagesMiddleware(req, res, next) {
     if (req.session && req.session.messages) {
         res.locals.messages = req.session.messages
@@ -27,6 +39,20 @@ function cartMiddleware(req, res, next) {
         res.locals.cartCount = cartCount
     }
 
+    res.getCartData = async () => {
+        const cart = req.session.cart
+        const slugList = Object.keys(cart)
+        let cartList = [], totalAmount = 0
+        for (let i = 0; i < slugList.length; i++) {
+            const slug = slugList[i]
+            let product = await db.getProductDataForCart(slug)
+            product['userNumber'] = cart[slug]
+            totalAmount += product.price * product['userNumber']
+            cartList.push(product)
+        }
+        return [cartList, totalAmount]
+    }
+
     res.addProductToCart = function (slug, quantity) {
         req.session.cart[slug] = parseInt(quantity)
     }
@@ -46,4 +72,4 @@ function cartMiddleware(req, res, next) {
     next()
 }
 
-module.exports = { cartMiddleware, globalMessagesMiddleware }
+module.exports = { cartMiddleware, globalMessagesMiddleware, sessionMiddleware }
