@@ -12,46 +12,59 @@
 <body>
     <%- include('partials/header') %>
 
-    <main class="w-0 py-0">
-        <h1>Twój koszyk</h1>
-        <% if (cart.length === 0) { %> 
-            <p>Pusto...</p>
-            <a href="/produkty">rób zakupy</a>
+    <main class="w-0 py-0 mta-0">
+        <% if (cart.length === 0) { %>
+            <h3>Twój koszyk jest pusty...</h3>
+            <a href="/produkty" class="secondary-button">Przeglądaj produkty</a>
         <% } else { %> 
-            <ul class="cart-list">
+            <ul class="cart-list nice-box mt-0">
                 <% for( let i = 0; i < cart.length; i++ ) { %>
                     <li class="cart-item">
-                        <div>
-                            <div class="cart-img-container">
-                                <img src="<%= cart[i].image %>" alt="<%= cart[i].name %>" class="fit-img">
+                        <div class="flex">
+                            <a href="/produkty/<%= cart[i].slug %>">
+                                <div class="cart-img-container">
+                                    <img src="<%= cart[i].image %>" alt="<%= cart[i].name %>" class="fit-img">
+                                </div>
+                            </a>
+                            
+                            <div class="flex-column">
+                                <a href="/produkty/<%= cart[i].slug %>" class="bold"><%= cart[i].name %></a>
+                                <span><%= cart[i].price %> zł</span>
                             </div>
-                            <span><%= cart[i].name %></span>
                         </div>
 
-                        <div class="px-0">
-                            <span><%= cart[i].price %></span>
+                        <div class="px-0 cart-item-info">
 
                             <form method="POST" action="/koszyk/<%= cart[i].slug %> ">
                                 <input type="number" value="<%= cart[i].userNumber - 1 %>" name="ilosc" class="hidden">
-                                <button <% if (cart[i].userNumber === 1) { %> disabled <% } %>>-</button>
+                                <button class="secondary-button" <% if (cart[i].userNumber === 1) { %> disabled <% } %>>-</button>
                             </form>
 
-                            <span>ilość: <%= cart[i].userNumber %></span>
+                            <span class="small-text">ilość: <%= cart[i].userNumber %></span>
 
                             <form method="POST" action="/koszyk/<%= cart[i].slug %> ">
                                 <input type="number" value="<%= cart[i].userNumber + 1 %>" name="ilosc" class="hidden">
-                                <button <% if (cart[i].stock === 1 || cart[i].userNumber + 1 === cart[i].stock) { %> disabled <% } %>>+</button>
+                                <button class="secondary-button" <% if (cart[i].quantity === 1 || cart[i].userNumber + 1 === cart[i].quantity) { %> disabled <% } %>>+</button>
                             </form>
 
                             <form method="POST" action="/koszyk/usun/<%= cart[i].slug %>">
-                                <button type="submit">usuń</button>
+                                <button class="secondary-button" type="submit">usuń</button>
                             </form>
                         </div>
                     </li>
                 <% } %>
             </ul>
-            <p>Łączna kwota pieniędzy: <%= totalAmount %> zł</p>
-            <a href="/dostawa">przejdź do dostawy</a>
+
+            <div class="flex-between nice-box">
+                <h3>Do zapłaty:</h3>
+                <div style="display: flex; flex-direction: column; justify-content: end;">
+                    <p class="bold"><%= totalAmount %> zł</p>
+                    <p class="small-text">+ dostawa</p>
+                </div>
+            </div>
+
+            <a class="primary-button" href="/dostawa">Przejdź do dostawy</a>
+
         <% } %>
     </main>
 

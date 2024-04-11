@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Potwierdzenie płatności</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+</head>
+
+<body>
+    <%- include('partials/header') %>
+
+    <main class="w-0 py-0">
+        <p>Status płatności</p>
+        <p>id zamówienia: <%= orderId %></p>
+        <p>status: <%= status %></p>        
+    </main>
+
+    <%- include('partials/footer') %>
+</body>
+
+</html>

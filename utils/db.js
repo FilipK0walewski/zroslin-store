@@ -149,7 +149,7 @@ async function getProducts(q, categories, sort, page) {
 
 async function getProductData(productSlug) {
     try {
-        const result = await pool.query('SELECT id, slug, name, description, quantity, stock, price, color FROM products WHERE slug = $1', [productSlug])
+        const result = await pool.query('SELECT id, slug, name, description, quantity, price, color FROM products WHERE slug = $1', [productSlug])
         if (result.rows.length === 0) {
             return [null, null]
         }
@@ -162,9 +162,9 @@ async function getProductData(productSlug) {
 
 async function getProductDataForCart(productSlug) {
     try {
-        const result = await pool.query('SELECT id, slug, name, quantity, stock, price FROM products WHERE slug = $1', [productSlug])
+        const result = await pool.query('SELECT id, slug, name, quantity, price FROM products WHERE slug = $1', [productSlug])
         if (result.rows.length === 0) {
-            return [null, null]
+            return null
         }
         let data = result.rows[0]
         const imageResult = await pool.query('SELECT url FROM images WHERE product_id = $1 limit 1', [result.rows[0].id])
@@ -175,7 +175,16 @@ async function getProductDataForCart(productSlug) {
     }
 }
 
+async function saveSessionId(sessionId) {
+    try {
+        await pool.query('INSERT INTO sessions (session_id) values ($1)', [sessionId])
+    } catch (err) {
+        throw err;
+    }
+}
+
 module.exports = {
+    pool,
     getUserByName,
     getUserEmailByName,
     checkIfUserExistsByName,
@@ -186,5 +195,6 @@ module.exports = {
     getProductData,
     getProductDataForCart,
     getCategoryData,
-    getSubcategories
+    getSubcategories,
+    saveSessionId
 };

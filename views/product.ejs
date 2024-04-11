@@ -48,11 +48,11 @@
         <div class="box my-0">
             <form method="POST" action="/koszyk/<%= product.slug %>" class="cart-form">
                 <span><%= product.price %> zł</span>
-                <% if (product.stock === 0) { %> 
+                <% if (product.quantity === 0) { %> 
                     <span>produkt niedostępny</span>
                 <% } else { %>
-                    <span>dostępna ilość: <%= product.stock %> </span>
-                    <input type="number" name="ilosc" class="input-0" value="1" min="1" max="<%= product.stock %>">
+                    <span>dostępna ilość: <%= product.quantity %> </span>
+                    <input type="number" name="ilosc" class="input-0" value="1" min="1" max="<%= product.quantity %>">
                     <button type="submit" class="btn-0">dodaj do koszyka</button>
                 <% } %> 
             </form>

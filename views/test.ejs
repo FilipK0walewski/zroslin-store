@@ -1,0 +1,47 @@
+<html>
+
+<head>
+    <style>
+        :root {
+            --colorPrimaryAlpha50: hsla(219, 96%, 45%, 50%);
+            --p-colorPrimaryAlpha20: hsla(210, 96%, 45%, 25%);
+
+            --focusBoxShadow: 0 0 0 3px var(--p-colorPrimaryAlpha20), 0 1px 1px 0 var(--p-colorBackgroundContrastAlpha08);
+            --p-colorBackgroundContrastAlpha08: rgba(0, 0, 0, 0.08);
+        }
+
+        html {
+            font-family: -apple-system, BlinkMacSystemFont, avenir next, avenir, segoe ui, helvetica neue, helvetica, Cantarell, Ubuntu, roboto, noto, arial, sans-serif; 
+        }
+
+        .input-1-container {
+            display: flex;
+            flex-direction: column-reverse;
+        }
+
+        .input-1 {
+            padding: 0.75rem;
+            background-color: #fff;
+            border-radius: 5px;
+            transition: background 0.15s ease, border 0.15s ease, box-shadow 0.15s ease, color 0.15s ease;
+            border: 1px solid #e6e6e6;
+            box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.03), 0px 3px 6px rgba(0, 0, 0, 0.02);
+        }
+
+        .input-1:focus {
+            outline: 0px;
+            border-color: var(--colorPrimaryAlpha50);
+            box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.03), 0px 3px 6px rgba(0, 0, 0, 0.02), var(--focusBoxShadow);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="input-1-container">
+        <input id="test" class="input-1" type="text">
+        <label for="test">test inputu:</label>
+    </div>
+
+</body>
+
+</html>
