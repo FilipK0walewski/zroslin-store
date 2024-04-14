@@ -1,6 +1,5 @@
-require('dotenv').config();
 const express = require('express');
-
+console.log(process.env.STRIPE_KEY)
 const stripe = require("stripe")(process.env.STRIPE_KEY);
 
 const db = require('../utils/db');
@@ -17,9 +16,9 @@ router.use(cartMiddleware)
 router.use(globalMessagesMiddleware)
 router.use(sessionMiddleware)
 
-router.get('/', (req, res) => {
-  res.render('index')
-})
+const controller = require('../controllers/views')
+
+router.get('/', controller.renderHomePage)
 
 router.get('/produkty', async (req, res) => {
   let { q, kategoria, sortowanie, strona } = req.query;
